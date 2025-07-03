@@ -1,0 +1,126 @@
+#include<stdio.h>
+#include<malloc.h>
+
+struct Node{
+    int Element;
+    struct Node* Next;  
+};
+
+typedef struct Node* position;
+typedef position List;
+
+position First(List L){
+    return L;
+}
+
+position endList(List L){
+    position p=First(L);
+    while(p->Next!=NULL){
+        p=p->Next;
+    }
+    return p;
+}
+
+position locate(int x,List L){
+    position p=First(L);
+    int found=0;
+    while(p!=endList(L)&&found==0){
+        if(p->Next->Element==x){
+            found =1;
+        }
+        else p=p->Next;
+    }
+    return p;
+}
+
+void deleteList(position p,List *pL){
+    position temp;
+    if(p->Next!=NULL){
+        temp=p->Next;
+        p->Next=temp->Next;
+        free(temp);
+    }
+}
+
+void xoadau(int x, List *pL){
+    position p=locate(x,*pL);
+    if(p->Next!=NULL)deleteList(p,pL);
+    else{
+        printf("khong tim thay phan tu");
+    }
+}
+void makenullList(List *pL){
+    *pL=(struct Node*)malloc(sizeof(struct Node));
+    (*pL)->Next=NULL;
+}
+
+void append(int x, List *pL){
+    position p=(*pL);
+    position q=(struct Node*)malloc(sizeof(struct Node));
+    while(p->Next!=NULL){
+        p=p->Next;
+    }
+    q->Element=x;
+    q->Next=p->Next;
+    p->Next=q;
+}
+
+int member(int x, List L){
+    position p=First(L);
+    while(p->Next!=NULL){
+        if(p->Next->Element==x){
+            return 1;
+        }
+        p=p->Next;
+    }
+    return 0;
+}
+
+void nhap(List *pL){
+    int n;
+    scanf("%d",&n);
+    makenullList(pL);
+    for(int i=0;i<n;i++){
+        int x;
+        scanf("%d",&x);
+        append(x,pL);
+    }
+}
+
+void hienthi(List L){
+    List temp=L->Next;
+    while(temp!=NULL){
+        printf("%d ",temp->Element);
+        temp=temp->Next;
+    }
+    printf("\n");
+}
+
+void unionSet(List L1,List L2,List *pL){
+    makenullList(pL);
+    position p=L1;
+    while(p->Next!=NULL){
+        if(!member(p->Next->Element,*pL)){
+        append(p->Next->Element,pL);
+        }
+        p=p->Next;
+    }
+    position q=L2;
+    while(q->Next!=NULL){
+        if(!member(q->Next->Element,*pL)){
+            append(q->Next->Element,pL);
+        }q=q->Next;
+    }
+}
+
+
+int main(){
+    List L1,L2,pL;
+    nhap(&L1);
+    nhap(&L2);
+    hienthi(L1);
+    hienthi(L2);
+    unionSet(L1,L2,&pL);
+    hienthi(pL);
+return 0;
+}
