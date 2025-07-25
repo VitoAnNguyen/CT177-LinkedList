@@ -61,7 +61,7 @@ void ketqua(DanhSach ds){
         }
     }
     else{
-        printf("Khong co sinh vien nao dat.\n");
+        printf("Khong co sinh vien nao khong dat.\n");
     }
 }
 
