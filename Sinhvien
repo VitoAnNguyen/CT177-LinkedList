@@ -1,0 +1,141 @@
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+
+typedef struct{
+    char ID[11];
+    char Name[51];
+    float R1;
+    float R2;
+    float R3;
+}Student;
+
+struct Node{
+    Student Element;
+    struct Node* Next;
+};
+
+typedef struct Node* Position;
+typedef Position List;
+
+List getList(){
+    List L;
+    L=(struct Node*)malloc(sizeof(struct Node));
+    L->Next=NULL;
+    return L;
+}
+
+Position locate(char x[10],List L){
+    Position p=L;
+    int found =0;
+    while(p->Next!=NULL&&found==0){
+        if(strcmp(p->Next->Element.ID,x)==0) found=1;
+        else p=p->Next;
+    }
+    return p;
+}
+
+int append(Student s, List *pL){
+    Position tim=locate(s.ID,*pL);
+    if(tim->Next!=NULL){
+        return 0;
+    }
+    else{
+        Position q=(struct Node*)malloc(sizeof(struct Node));
+        Position p=*pL;
+        while(p->Next!=NULL){
+            p=p->Next;
+        }
+        q->Element=s;
+        q->Next=p->Next;
+        p->Next=q;
+    }
+    return 1;
+}
+List readList()
+{
+	int n,i;
+	Student s;
+	char st[50];
+	List L = getList(); // Khởi tạo danh sách rỗng
+	scanf("%d",&n);
+	for(i=1;i<=n;i++)
+	{
+		scanf(" "); //skip some characters
+		fgets(st,10,stdin);
+		if (st[strlen(st)-1] == '\n')
+			st[strlen(st)-1] = '\0';
+		strcpy(s.ID, st);
+		fgets(st,50,stdin);
+		if (st[strlen(st)-1] == '\n')
+			st[strlen(st)-1] = '\0';
+		strcpy(s.Name, st);
+		scanf("%f%f%f",&s.R1,&s.R2,&s.R3);
+		// Nếu mã sinh viên chưa có thì chèn vào danh sách
+                Position tim=locate(s.ID,L);
+              if(tim->Next!=NULL){
+                  printf("%s exists\n",s.ID);
+              }else{
+                  append(s,&L);
+              }  
+	}
+	return L;
+}    
+void printList(List L)
+{
+	//Duyệt qua danh sách L và hiển thị giá trị lên màn hình
+	/*Khi hiển thị thì tính luôn điểm tống hợp với điểm tổng hợp là trung bình cộng của R1, R2, R3*/
+	typedef struct Node* Position;
+Position p=L;
+int count=1;
+while(p->Next!=NULL){
+    Student s=p->Next->Element;
+    printf("%2d -        %-3s - %50s - %.3f - %.3f - %.3f - %.3f\n",count,s.ID,s.Name,s.R1,s.R2,s.R3,(s.R1+s.R2+s.R3)/3);
+    p=p->Next;
+    count++;
+}
+}
+void showPassedList(List L)
+{
+    Position p = L;
+    int count = 1;
+    int passedCount = 0;
+
+    while (p != NULL) {
+        Student s = p->Element;
+        float avg = (s.R1 + s.R2 + s.R3) / 3.0;
+        if (avg >= 4.0) {
+            printf("%2d - %10s - %50s - %5.3f - %5.3f - %5.3f - %5.3f\n",
+                   count, s.ID, s.Name, s.R1, s.R2, s.R3, avg);
+            count++;
+            passedCount++;
+        }
+        p = p->Next;
+    }
+    printf("%d students in total\n", passedCount);
+}
+
+List getFailedList(List L)
+{
+	Position p = L;
+    int count = 1;
+
+    while (p->Next != NULL) {
+        Student s = p->Next->Element;
+        float avg = (s.R1 + s.R2 + s.R3) / 3.0;
+        if (avg < 4.0) {
+            printf("%2d - %10s - %50s - %5.3f - %5.3f - %5.3f - %5.3f\n",
+                   count, s.ID, s.Name, s.R1, s.R2, s.R3, avg);
+            count++;
+        }
+        p = p->Next;
+    }
+    return L;
+}
+int main() {
+    List L;
+    L = readList();
+    printList(L);
+    showPassedList(L);
+    return 0;
+}
