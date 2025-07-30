@@ -33,6 +33,12 @@ void nhap(DanhSach *ds){
         getchar();
     }
 }
+void xoaSinhVien(char x[],DanhSach *pL){
+    int p=tim(x,*pL);
+    if(p>=1&&p<=pL->n){
+        xoaTai(p,pL);
+    }
+}
 
 int tim(char x[],DanhSach L){
     for(int i=0;i<L.n;i++){
