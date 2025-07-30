@@ -63,3 +63,79 @@ int main(){
     macan[strcspn(macan,"\n")]='\0';
     Timkiem(L,macan);
 }
+#include<stdio.h>
+#define Maxlength 100
+
+typedef int Position;
+typedef int ElementType;
+
+typedef struct{
+    int Elements[Maxlength];
+    int Last;
+}List;
+
+int First(List L){
+    return 1;
+}
+
+int endList(List L){
+    return L.Last+1;
+}
+
+int retrieve(Position p, List L){
+    return L.Elements[p-1];
+}
+
+Position next(Position p, List L){
+    return p+1;
+}
+
+void deleteList(Position p, List *pL){
+    for(int q=p-1;q<pL->Last;q++){
+            pL->Elements[q]=pL->Elements[q+1];
+    }
+    pL->Last--;
+}
+
+int locate(int x, List *pL){
+    Position p;
+    p=First(*pL);
+    while(p!=endList(*pL)){
+        if(retrieve(p,*pL)==x){
+                deleteList(p,pL);
+            return p;
+        }p=next(p,*pL);
+    }
+    return endList(*pL);
+}
+
+
+void nhapds(List *pL){
+    int n, x;
+    pL->Last = 0;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++){
+        scanf("%d",&x);
+        pL->Elements[pL->Last++]=x;
+    }
+}
+
+void printds(List L){
+    Position p;
+    p=First(L);
+    while(p!=endList(L)){
+        printf("%d ", retrieve(p,L));
+        p=next(p,L);
+    }printf("\n");
+}
+
+int main(){
+    List L;
+    nhapds(&L);
+    printds(L);
+    int x;
+    scanf("%d",&x);
+    locate(x,&L);
+    printds(L);
+
+}
