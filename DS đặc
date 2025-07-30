@@ -89,6 +89,22 @@ int retrieve(Position p, List L){
 Position next(Position p, List L){
     return p+1;
 }
+void insertList(int x, int p, List *pL){
+    if(pL->Last==Maxlength){
+        printf("danh sach day");
+    }
+    else if(p<First(*pL)||p>endList(*pL)){
+        printf("loi");
+    }else{
+        Position q;
+        for(q=pL->Last;q>p-1;q--){
+            pL->Elements[q]=pL->Elements[q-1];
+        }
+            pL->Last++;
+            pL->Elements[p-1]=x;
+        }
+    }
+
 
 void deleteList(Position p, List *pL){
     for(int q=p-1;q<pL->Last;q++){
