@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 40
+
+typedef struct {
+    char MSSV[11];       // Mã số sinh viên (10 ký tự + '\0')
+    char HoTen[51];      // Họ và tên (50 ký tự + '\0')
+    float LT;            // Điểm lý thuyết
+    float TH1;           // Điểm thực hành 1
+    float TH2;           // Điểm thực hành 2
+} SinhVien;
+
+typedef struct {
+    SinhVien A[MAX];
+    int n;               // Số lượng sinh viên hiện có
+} DanhSach;
+
+// Nhập thông tin 1 sinh viên
+void nhapSV(SinhVien *sv) {
+    printf("Nhap MSSV: ");
+    scanf(" %10s", sv->MSSV);
+    printf("Nhap ho ten: ");
+    scanf(" %[^\n]", sv->HoTen);
+    printf("Nhap diem LT, TH1, TH2: ");
+    scanf("%f %f %f", &sv->LT, &sv->TH1, &sv->TH2);
+}
+
+// Nhập danh sách sinh viên
+void nhapDS(DanhSach *ds) {
+    printf("Nhap so sinh vien: ");
+    scanf("%d", &ds->n);
+    if (ds->n > MAX) ds->n = MAX;
+
+    for (int i = 0; i < ds->n; i++) {
+        printf("Nhap sinh vien thu %d:\n", i + 1);
+        nhapSV(&ds->A[i]);
+    }
+}
+
+// Hiển thị thông tin 1 sinh viên
+void hienthiSV(SinhVien sv) {
+    printf("%-10s | %-20s | %.2f | %.2f | %.2f\n", sv.MSSV, sv.HoTen, sv.LT, sv.TH1, sv.TH2);
+}
+
+// Hiển thị danh sách sinh viên
+void hienthiDS(DanhSach ds) {
+    printf("\nDanh sach sinh vien:\n");
+    printf("MSSV       | Ho ten             | LT   | TH1  | TH2\n");
+    for (int i = 0; i < ds.n; i++) {
+        hienthiSV(ds.A[i]);
+    }
+}
+
+// Tìm vị trí sinh viên theo mã số (trả về chỉ số, hoặc -1 nếu không tìm thấy)
+int tim(char mssv[], DanhSach ds) {
+    for (int i = 0; i < ds.n; i++) {
+        if (strcmp(ds.A[i].MSSV, mssv) == 0)
+            return i;
+    }
+    return -1;
+}
+
+// Xóa sinh viên theo mã số
+void xoa(char mssv[], DanhSach *ds) {
+    int vt = tim(mssv, *ds);
+    if (vt == -1) {
+        printf("Khong tim thay MSSV %s de xoa.\n", mssv);
+        return;
+    }
+
+    for (int i = vt; i < ds->n - 1; i++) {
+        ds->A[i] = ds->A[i + 1];
+    }
+    ds->n--;
+    printf("Da xoa sinh vien co MSSV %s.\n", mssv);
+}
+
+// Hàm main
+int main() {
+    DanhSach ds;
+    nhapDS(&ds);
+    hienthiDS(ds);
+
+    char mssv_xoa[11];
+    printf("\nNhap MSSV can xoa: ");
+    scanf(" %10s", mssv_xoa);
+    xoa(mssv_xoa, &ds);
+
+    hienthiDS(ds);
+    return 0;
+}
