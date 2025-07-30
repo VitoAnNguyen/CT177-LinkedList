@@ -33,6 +33,22 @@ void nhap(DanhSach *ds){
         getchar();
     }
 }
+
+int tim(char x[],DanhSach L){
+    for(int i=0;i<L.n;i++){
+        if(strcmp(L.A[i].MSSV,x)==0){
+            return i+1;
+        }
+    }return L.n+1;
+}
+int xoaTai(int p,DanhSach*pL){
+    int q;
+    for(q=p-1;q<pL->n;q++){
+        pL->A[q]=pL->A[q+1];
+    }
+    pL->n--;
+    return 0;
+}
 void hienthi(DanhSach ds){
     for(int i=0;i<ds.n;i++){
         printf("%s - %s - %.2f - %.2f - %.2f\n",ds.A[i].masv,ds.A[i].hoten,ds.A[i].lt,ds.A[i].th1,ds.A[i].th2);
