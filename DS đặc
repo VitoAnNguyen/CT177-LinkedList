@@ -1,0 +1,65 @@
+#include<stdio.h>
+#include<string.h>
+
+#define MaxLength 40
+
+typedef struct{
+    char masv[11];
+    char hoten[51];
+    float lt;
+    float th1;
+    float th2;
+}SinhVien;
+
+typedef struct{
+    SinhVien A[MaxLength];
+    int n;
+}DanhSach;
+
+
+
+void nhap(DanhSach *ds){
+    scanf("%d",&ds->n);
+    getchar();
+   
+    for(int i=0;i<ds->n;i++){
+        fgets(ds->A[i].masv,sizeof(ds->A[i].masv),stdin);
+        ds->A[i].masv[strcspn(ds->A[i].masv,"\n")]='\0';
+       
+        fgets(ds->A[i].hoten,sizeof(ds->A[i].hoten),stdin);
+        ds->A[i].hoten[strcspn(ds->A[i].hoten,"\n")]='\0';
+       
+        scanf("%f %f %f",&ds->A[i].lt,&ds->A[i].th1,&ds->A[i].th2);
+        getchar();
+    }
+}
+
+void hienthi(DanhSach ds){
+    for(int i=0;i<ds.n;i++){
+        printf("%s - %s - %.2f - %.2f - %.2f\n",ds.A[i].masv,ds.A[i].hoten,ds.A[i].lt,ds.A[i].th1,ds.A[i].th2 );
+    }
+}
+
+void Timkiem(DanhSach ds, char macan[]){
+    int found=0;
+    for(int i=0;i<ds.n;i++){
+        if(strcmp(ds.A[i].masv,macan)==0){
+            printf("Tim thay sinh vien %s. Thong tin sinh vien:\n%s - %s - %.2f - %.2f - %.2f",ds.A[i].masv,ds.A[i].masv,ds.A[i].hoten,ds.A[i].lt,ds.A[i].th1,ds.A[i].th2);
+            found=1;
+            break;
+        }
+    }
+    if(found==0){
+        printf("Khong tim thay sinh vien %s",macan);
+    }
+}
+
+int main(){
+    DanhSach L;
+    nhap(&L);
+    hienthi(L);
+    char macan[11];
+    fgets(macan,sizeof(macan),stdin);
+    macan[strcspn(macan,"\n")]='\0';
+    Timkiem(L,macan);
+}
